@@ -1,6 +1,10 @@
+Report on run on code with git commit in current repo.
+
+`commit: 7a2f6f654f6c72ded5720a250867fa3d786c837d`
+
 Summary findings for PUT requests.
-- Sequential requests is faster with aiohttp
-- parallel requests is slower with aiohttp compared to other modules with threading.
+
+aiohttp performs better than other http modules when number of requests are scaled.
 
 Run the aiohttp based server.
 ```sh
@@ -18,15 +22,15 @@ Run the aiohttp based client tests.
 
 Sequential Requests:
 Params: total_count 100
-Total time for 100 requests = 110 ms.
-Avg time per request = 1.1 ms.
+Total time for 100 requests = 118 ms.
+Avg time per request = 1.18 ms.
 
 -----------------------------------------
 
 Parallel Requests:
 Params: total_count 100, max_conn 100
-Total time for 100 requests = 6502 ms.
-Avg time per request = 65.02 ms.
+Total time for 100 requests = 101 ms.
+Avg time per request = 1.01 ms.
 
 -----------------------------------------
 ```
@@ -37,15 +41,15 @@ Run http client module based client tests.
 
 Sequential Requests:
 Params: total_count 100
-Total time for 100 requests = 114 ms.
-Avg time per request = 1.14 ms.
+Total time for 100 requests = 102 ms.
+Avg time per request = 1.02 ms.
 
 -----------------------------------------
 
 Parallel Requests:
 Params: total_count 100, threads_count 100
-Total time for 100 requests = 142 ms.
-Avg time per request = 1.42 ms.
+Total time for 100 requests = 137 ms.
+Avg time per request = 1.37 ms.
 
 -----------------------------------------
 ```
@@ -56,15 +60,15 @@ Run requests module based client tests.
 
 Sequential Requests:
 Params: total_count 100
-Total time for 100 requests = 205 ms.
-Avg time per request = 2.05 ms.
+Total time for 100 requests = 200 ms.
+Avg time per request = 2.0 ms.
 
 -----------------------------------------
 
 Parallel Requests:
 Params: total_count 100, threads_count 100
-Total time for 100 requests = 380 ms.
-Avg time per request = 3.8 ms.
+Total time for 100 requests = 237 ms.
+Avg time per request = 2.37 ms.
 
 -----------------------------------------
 ```

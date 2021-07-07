@@ -21,16 +21,16 @@ Run the aiohttp based client tests.
 # python3 aiohttp/aiohttp-client.py 
 
 Sequential Requests:
-Params: total_count 10000
-Total time for 10000 requests = 10372 ms.
-Avg time per request = 1.0372 ms.
+Params: total_count 1000
+Total time for 1000 requests = 1040 ms.
+Avg time per request = 1.04 ms.
 
 -----------------------------------------
 
 Parallel Requests:
-Params: total_count 10000, max_conn 1000
-Total time for 10000 requests = 7525 ms.
-Avg time per request = 0.7525 ms.
+Params: total_count 1000, max_conn 100
+Total time for 1000 requests = 727 ms.
+Avg time per request = 0.727 ms.
 
 -----------------------------------------
 ```
@@ -40,16 +40,16 @@ Run http client module based client tests.
 # python3 httpclient/httpclient-threading.py 
 
 Sequential Requests:
-Params: total_count 10000
-Total time for 10000 requests = 10789 ms.
-Avg time per request = 1.0789 ms.
+Params: total_count 1000
+Total time for 1000 requests = 1441 ms.
+Avg time per request = 1.441 ms.
 
 -----------------------------------------
 
 Parallel Requests:
-Params: total_count 10000, threads_count 10000
-Total time for 10000 requests = 22078 ms.
-Avg time per request = 2.2078 ms.
+Params: total_count 1000, threads_count 1000
+Total time for 1000 requests = 1877 ms.
+Avg time per request = 1.877 ms.
 
 -----------------------------------------
 ```
@@ -59,16 +59,16 @@ Run requests module based client tests.
 # python requests/requests-threading.py 
 
 Sequential Requests:
-Params: total_count 10000
-Total time for 10000 requests = 20514 ms.
-Avg time per request = 2.0514 ms.
+Params: total_count 1000
+Total time for 1000 requests = 2738 ms.
+Avg time per request = 2.738 ms.
 
 -----------------------------------------
 
 Parallel Requests:
-Params: total_count 10000, threads_count 10000
-Total time for 10000 requests = 29091 ms.
-Avg time per request = 2.9091 ms.
+Params: total_count 1000, threads_count 1000
+Total time for 1000 requests = 4369 ms.
+Avg time per request = 4.369 ms.
 
 -----------------------------------------
 ```
