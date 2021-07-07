@@ -11,24 +11,10 @@ def print_report(total_count, total_time_ms):
         total_time_ms / total_count))
     print("-----------------------------------------\n")
 
-class WorkItem:
-    def __init__(self, session):
-        self.session = session
-        self.status = None
-        self.elapsed_time_ms = None
-
-def thread_func_put_api(work_item):
-    start_time = time.perf_counter()
-
-    resp = work_item.session.put("http://localhost/hello", data="Hello World!!")
-
-    end_time = time.perf_counter()
-
-    work_item.elapsed_time_ms = int(round((end_time - start_time) * 1000))
-    work_item.status = resp.status_code
+def thread_func_put_api(session):
+    resp = session.put("http://localhost/hello", data="Hello World!!")
 
     assert resp.status_code == 200
-
     return
 
 # Test case 1: Runs each request in sequence.
@@ -36,11 +22,12 @@ def test_case_seq_reqs(total_count):
     print("\nSequential Requests:\nParams: total_count {}".format(total_count))
     client_session = requests.Session()
 
-    total_time_ms = 0
+    start_time = time.perf_counter()
     for i in range(total_count):
-        work = WorkItem(client_session)
-        thread_func_put_api(work)
-        total_time_ms += work.elapsed_time_ms
+        thread_func_put_api(client_session)
+    end_time = time.perf_counter()
+
+    total_time_ms = int(round((end_time - start_time) * 1000))
 
     print_report(total_count, total_time_ms)
 
@@ -52,13 +39,10 @@ def test_case_parallel(total_count):
 
     # Start threads to upload objects.
     request_threads = []
-    work_items = []
+    start_time = time.perf_counter()
     for i in range(total_count):
-        work = WorkItem(client_session)
-        work_items.append(work)
-
         t = threading.Thread(
-            target=thread_func_put_api, args=(work,))
+            target=thread_func_put_api, args=(client_session,))
         request_threads.append(t)
         t.start()
 
@@ -66,9 +50,10 @@ def test_case_parallel(total_count):
     total_time_ms = 0
     for i in range(total_count):
         request_threads[i].join()
-        assert work_items[i].status == 200
-        total_time_ms += work_items[i].elapsed_time_ms
 
+    end_time = time.perf_counter()
+
+    total_time_ms = int(round((end_time - start_time) * 1000))
     print_report(total_count, total_time_ms)
 
 def main():

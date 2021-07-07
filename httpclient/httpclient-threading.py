@@ -12,22 +12,11 @@ def print_report(total_count, total_time_ms):
         total_time_ms / total_count))
     print("-----------------------------------------\n")
 
-class WorkItem:
-    def __init__(self):
-        self.uri = "/hello"
-        self.status = None
-        self.elapsed_time_ms = None
-
-def thread_func_put_api(work_item):
-    start_time = time.perf_counter()
+def thread_func_put_api():
     conn = http.client.HTTPConnection("localhost")
 
-    conn.request("PUT", work_item.uri, "Hello World!")
+    conn.request("PUT", "/hello", "Hello World!")
     response = conn.getresponse()
-    end_time = time.perf_counter()
-
-    work_item.elapsed_time_ms = int(round((end_time - start_time) * 1000))
-    work_item.status = response.status
 
     assert response.status == 200
 
@@ -37,12 +26,12 @@ def thread_func_put_api(work_item):
 def test_case_seq_reqs(total_count):
     print("\nSequential Requests:\nParams: total_count {}".format(total_count))
 
-    total_time_ms = 0
+    start_time = time.perf_counter()
     for i in range(total_count):
-        work = WorkItem()
-        thread_func_put_api(work)
+        thread_func_put_api()
 
-        total_time_ms += work.elapsed_time_ms
+    end_time = time.perf_counter()
+    total_time_ms = int(round((end_time - start_time) * 1000))
 
     print_report(total_count, total_time_ms)
 
@@ -53,22 +42,18 @@ def test_case_parallel(total_count):
 
     # Start threads to upload objects.
     request_threads = []
-    work_items = []
+    start_time = time.perf_counter()
     for i in range(total_count):
-        work = WorkItem()
-        work_items.append(work)
-
-        t = threading.Thread(
-            target=thread_func_put_api, args=(work,))
+        t = threading.Thread(target=thread_func_put_api)
         request_threads.append(t)
         t.start()
 
     # Wait for threads to complete.
-    total_time_ms = 0
     for i in range(total_count):
         request_threads[i].join()
-        assert work_items[i].status == 200
-        total_time_ms += work_items[i].elapsed_time_ms
+
+    end_time = time.perf_counter()
+    total_time_ms = int(round((end_time - start_time) * 1000))
 
     print_report(total_count, total_time_ms)
 
